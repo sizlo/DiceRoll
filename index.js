@@ -1,10 +1,14 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+
 const port = process.env.PORT || 3000
 
 const diceRegex = /^(\d+)d(\d+)$/
 const maxNumberOfDice = 100
+const minNumberOfDice = 1
+const maxNumberOfSides = 1000000000
+const minNumberOfSides = 1
 
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -19,16 +23,35 @@ app.post('/command/', (req, res) => {
     }
 
     if (!isValid(diceInput)) {
-        res.send(buildInvalidInputResponse(diceInput))
-        return
-    }
-    
-    if (tooManyDice(diceInput)) {
-        res.send(buildTooManyDiceResponse())
+        res.send(buildErrorResponse(`Input ${diceInput} is not valid, give input in the form of XdY. E.g /roll 3d20`))
         return
     }
 
-    let diceResults = roll(diceInput)
+    let matches = diceRegex.exec(diceInput)
+    let numDice = parseInt(matches[1])
+    let numSides = parseInt(matches[2])
+    
+    if (numDice > maxNumberOfDice) {
+        res.send(buildErrorResponse(`The maximum number of dice to roll is ${maxNumberOfDice}`))
+        return
+    }
+
+    if (numDice < minNumberOfDice) {
+        res.send(buildErrorResponse(`The minimum number of dice to roll is ${minNumberOfDice}`))
+        return
+    }
+
+    if (numSides > maxNumberOfSides) {
+        res.send(buildErrorResponse(`The maximum number of sides is ${maxNumberOfSides}`))
+        return
+    }
+
+    if (numSides < minNumberOfSides) {
+        res.send(buildErrorResponse(`The minimum number of sides is ${minNumberOfSides}`))
+        return
+    }
+
+    let diceResults = roll(numDice, numSides)
     res.send(buildDiceResultResponse(diceInput, diceResults))
 })
 
@@ -42,32 +65,23 @@ function isValid(diceInput) {
     return diceRegex.test(diceInput)
 }
 
-function tooManyDice(diceInput) {
-    let matches = diceRegex.exec(diceInput)
-    let numDice = parseInt(matches[1])
-    return numDice > maxNumberOfDice
-}
-
-function roll(diceInput) {
-    let matches = diceRegex.exec(diceInput)
-    let numDice = parseInt(matches[1])
-    let diceValue = parseInt(matches[2])
+function roll(numDice, numSides) {
     let results = []
     for (let i = 0; i < numDice; i++) {
-        results.push(generateRandomNumber(diceValue))
+        results.push(generateRandomNumber(numSides))
     }
     return results
 }
 
-function generateRandomNumber(diceValue) {
-    return Math.floor(Math.random() * diceValue + 1);
+function generateRandomNumber(maxValue) {
+    return Math.floor(Math.random() * maxValue + 1);
 }
 
-function buildInvalidInputResponse(diceInput) {
+function buildErrorResponse(message) {
     return `
         {
             "response_type": "ephemeral",
-            "text": "Input ${diceInput} is not valid, give input in the form of XdY. E.g /roll 3d20"
+            "text": "${message}"
         }
     `
 }
