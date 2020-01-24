@@ -86,15 +86,6 @@ function buildErrorResponse(message) {
     `
 }
 
-function buildTooManyDiceResponse(diceInput) {
-    return `
-        {
-            "response_type": "ephemeral",
-            "text": "The maximum number of dice to roll is ${maxNumberOfDice}"
-        }
-    `
-}
-
 function buildDiceResultResponse(diceResults) {
     return `
         {
