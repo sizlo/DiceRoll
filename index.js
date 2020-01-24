@@ -1,13 +1,15 @@
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
 const port = process.env.PORT || 3000
 
 const diceRegex = /(\d+)d(\d+)/
 
 app.use(express.static('public'))
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.post('/command/', (req, res) => {
-    let diceInput = req.query.text
+    let diceInput = req.body.text
     if (isValid(diceInput)) {
         let diceResults = roll(diceInput)
         res.send(diceResults.join(", "))
