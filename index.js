@@ -23,7 +23,7 @@ app.post('/command/', (req, res) => {
     }
 
     if (!isValid(diceInput)) {
-        res.send(buildErrorResponse(`Input ${diceInput} is not valid, give input in the form of XdY. E.g /roll 3d20`))
+        res.send(buildErrorResponse(`Input was not valid, give input in the form of XdY. E.g /roll 3d20`))
         return
     }
 
