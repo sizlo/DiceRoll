@@ -99,7 +99,7 @@ function buildDiceResultResponse(diceResults) {
     return `
         {
             "response_type": "in_channel",
-            "text": "Rolling... :game_die: Results: ${diceResults.join(", ")}"
+            "text": "Rolling... :game_die: Result${diceResults.length === 1 ? "" : "s"}: ${diceResults.join(", ")}"
         }
     `
 }
