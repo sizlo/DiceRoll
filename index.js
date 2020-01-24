@@ -9,6 +9,7 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.post('/command/', (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
     let diceInput = req.body.text
     if (isValid(diceInput)) {
         let diceResults = roll(diceInput)
