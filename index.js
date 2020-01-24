@@ -11,6 +11,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.post('/command/', (req, res) => {
     res.setHeader('Content-Type', 'application/json')
     let diceInput = req.body.text
+    if (isEmpty(diceInput)){
+        diceInput = '1d6'
+    }
     if (isValid(diceInput)) {
         let diceResults = roll(diceInput)
         res.send(buildDiceResultResponse(diceInput, diceResults))
@@ -20,6 +23,10 @@ app.post('/command/', (req, res) => {
 })
 
 app.listen(port, () => console.log(`Dice Roll listening on port ${port}!`))
+
+function isEmpty(theString) {
+    return !theString || theString.length === 0
+}
 
 function isValid(diceInput) {
     return diceRegex.test(diceInput)
