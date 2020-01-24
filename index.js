@@ -3,7 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const port = process.env.PORT || 3000
 
-const diceRegex = /(\d+)d(\d+)/
+const diceRegex = /^(\d+)d(\d+)$/
 
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -12,9 +12,9 @@ app.post('/command/', (req, res) => {
     let diceInput = req.body.text
     if (isValid(diceInput)) {
         let diceResults = roll(diceInput)
-        res.send(diceResults.join(", "))
+        res.send(buildDiceResultResponse(diceInput, diceResults))
     } else {
-        res.send('Input "' + diceInput + '" is not valid')
+        res.send(buildErrorResponse(diceInput))
     }
 })
 
@@ -37,4 +37,22 @@ function roll(diceInput) {
 
 function generateRandomNumber(diceValue) {
     return Math.floor(Math.random() * diceValue + 1);
+}
+
+function buildDiceResultResponse(diceInput, diceResults) {
+    return `
+        {
+            "response_type": "in_channel",
+            "text": "Rolling ${diceInput}... Results: ${diceResults.join(", ")}"
+        }
+    `
+}
+
+function buildErrorResponse(diceInput) {
+    return `
+        {
+            "response_type": "ephemeral",
+            "text": "Input ${diceInput} is not valid, give input in the form of XdY. E.g /roll 3d20"
+        }
+    `
 }
