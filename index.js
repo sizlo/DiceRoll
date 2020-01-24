@@ -4,7 +4,7 @@ const port = process.env.PORT || 3000
 
 const diceRegex = /(\d+)d(\d+)/
 
-app.get('/', (req, res) => res.send('Dice Roll'))
+app.use(express.static('public'))
 
 app.post('/command/', (req, res) => {
     let diceInput = req.query.text

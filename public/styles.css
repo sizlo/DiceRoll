@@ -1,0 +1,15 @@
+body {
+    color: #454545;
+    font-family: Arial;
+    margin: 20px;
+}
+
+.heading {
+    display: flex;
+}
+
+.icon {
+    width: 80px;
+    height: 80px;
+    margin-left: 10px;
+}
