@@ -4,22 +4,32 @@ const bodyParser = require('body-parser')
 const port = process.env.PORT || 3000
 
 const diceRegex = /^(\d+)d(\d+)$/
+const maxNumberOfDice = 100
 
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.post('/command/', (req, res) => {
     res.setHeader('Content-Type', 'application/json')
+
     let diceInput = req.body.text
+
     if (isEmpty(diceInput)){
         diceInput = '1d6'
     }
-    if (isValid(diceInput)) {
-        let diceResults = roll(diceInput)
-        res.send(buildDiceResultResponse(diceInput, diceResults))
-    } else {
-        res.send(buildErrorResponse(diceInput))
+
+    if (!isValid(diceInput)) {
+        res.send(buildInvalidInputResponse(diceInput))
+        return
     }
+    
+    if (tooManyDice(diceInput)) {
+        res.send(buildTooManyDiceResponse())
+        return
+    }
+
+    let diceResults = roll(diceInput)
+    res.send(buildDiceResultResponse(diceInput, diceResults))
 })
 
 app.listen(port, () => console.log(`Dice Roll listening on port ${port}!`))
@@ -30,6 +40,12 @@ function isEmpty(theString) {
 
 function isValid(diceInput) {
     return diceRegex.test(diceInput)
+}
+
+function tooManyDice(diceInput) {
+    let matches = diceRegex.exec(diceInput)
+    let numDice = parseInt(matches[1])
+    return numDice > maxNumberOfDice
 }
 
 function roll(diceInput) {
@@ -47,20 +63,29 @@ function generateRandomNumber(diceValue) {
     return Math.floor(Math.random() * diceValue + 1);
 }
 
+function buildInvalidInputResponse(diceInput) {
+    return `
+        {
+            "response_type": "ephemeral",
+            "text": "Input ${diceInput} is not valid, give input in the form of XdY. E.g /roll 3d20"
+        }
+    `
+}
+
+function buildTooManyDiceResponse(diceInput) {
+    return `
+        {
+            "response_type": "ephemeral",
+            "text": "The maximum number of dice to roll is ${maxNumberOfDice}"
+        }
+    `
+}
+
 function buildDiceResultResponse(diceInput, diceResults) {
     return `
         {
             "response_type": "in_channel",
             "text": "Rolling ${diceInput}... Results: ${diceResults.join(", ")}"
-        }
-    `
-}
-
-function buildErrorResponse(diceInput) {
-    return `
-        {
-            "response_type": "ephemeral",
-            "text": "Input ${diceInput} is not valid, give input in the form of XdY. E.g /roll 3d20"
         }
     `
 }
