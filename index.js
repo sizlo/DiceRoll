@@ -52,7 +52,7 @@ app.post('/command/', (req, res) => {
     }
 
     let diceResults = roll(numDice, numSides)
-    res.send(buildDiceResultResponse(diceInput, diceResults))
+    res.send(buildDiceResultResponse(diceResults))
 })
 
 app.listen(port, () => console.log(`Dice Roll listening on port ${port}!`))
@@ -95,11 +95,11 @@ function buildTooManyDiceResponse(diceInput) {
     `
 }
 
-function buildDiceResultResponse(diceInput, diceResults) {
+function buildDiceResultResponse(diceResults) {
     return `
         {
             "response_type": "in_channel",
-            "text": "Rolling ${diceInput}... Results: ${diceResults.join(", ")}"
+            "text": "Rolling... :game_die: Results: ${diceResults.join(", ")}"
         }
     `
 }
