@@ -4,6 +4,10 @@ body {
     margin: 20px;
 }
 
+h2 {
+    margin-top: 50px;
+}
+
 .heading {
     display: flex;
 }
@@ -16,4 +20,10 @@ body {
 
 .example {
     height: 100px;
+    margin-bottom: 50px;
+}
+
+.mono {
+    background-color: #e2e2e2;
+    font-family: monospace;
 }
