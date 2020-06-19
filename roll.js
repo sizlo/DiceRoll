@@ -15,7 +15,8 @@ module.exports = {
         }
 
         if (!isValid(diceInput)) {
-            return slack.buildPrivateResponse(`Input was not valid, give input in the form of XdY. E.g /roll 3d20`)
+            res.send(slack.buildPrivateResponse(`Input was not valid, give input in the form of XdY. E.g /roll 3d20`))
+            return
         }
 
         let matches = diceRegex.exec(diceInput)
@@ -23,23 +24,27 @@ module.exports = {
         let numSides = parseInt(matches[2])
         
         if (numDice > maxNumberOfDice) {
-            return slack.buildPrivateResponse(`The maximum number of dice to roll is ${maxNumberOfDice}`)
+            res.send(slack.buildPrivateResponse(`The maximum number of dice to roll is ${maxNumberOfDice}`))
+            return
         }
 
         if (numDice < minNumberOfDice) {
-            return slack.buildPrivateResponse(`The minimum number of dice to roll is ${minNumberOfDice}`)
+            res.send(slack.buildPrivateResponse(`The minimum number of dice to roll is ${minNumberOfDice}`))
+            return
         }
 
         if (numSides > maxNumberOfSides) {
-            return slack.buildPrivateResponse(`The maximum number of sides is ${maxNumberOfSides}`)
+            res.send(slack.buildPrivateResponse(`The maximum number of sides is ${maxNumberOfSides}`))
+            return
         }
 
         if (numSides < minNumberOfSides) {
-            return slack.buildPrivateResponse(`The minimum number of sides is ${minNumberOfSides}`)
+            res.send(slack.buildPrivateResponse(`The minimum number of sides is ${minNumberOfSides}`))
+            return
         }
 
         let diceResults = rollAllDice(numDice, numSides)
-        return slack.buildPublicResponse(`Rolling... :game_die: Result${diceResults.length === 1 ? "" : "s"}: ${diceResults.join(", ")}`)
+        res.send(slack.buildPublicResponse(`Rolling... :game_die: Result${diceResults.length === 1 ? "" : "s"}: ${diceResults.join(", ")}`))
     }
 }
 
@@ -54,11 +59,11 @@ function isValid(diceInput) {
 function rollAllDice(numDice, numSides) {
     let results = []
     for (let i = 0; i < numDice; i++) {
-        results.push(generateRandomNumber(numSides))
+        results.push(generateRandomNumberBetweenOneAnd(numSides))
     }
     return results
 }
 
-function generateRandomNumber(maxValue) {
+function generateRandomNumberBetweenOneAnd(maxValue) {
     return Math.floor(Math.random() * maxValue + 1);
 }

@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const roll = require('./roll.js')
+const randomUser = require('./random-user.js')
 const slack = require('./slack.js')
 
 const port = process.env.PORT || 3000
@@ -13,8 +14,10 @@ app.post('/command/', (req, res) => {
     res.setHeader('Content-Type', 'application/json')
 
     let command = req.body.command
-    if (command === 'roll') {
-        res.send(roll.doCommand(req, res))
+    if (command === '/roll') {
+        roll.doCommand(req, res)
+    } else if (command === '/randomuser') {
+        randomUser.doCommand(req, res)
     } else {
         res.send(slack.buildPrivateResponse(`Unknown command: ${command}`))
     }
