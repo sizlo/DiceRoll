@@ -1,4 +1,5 @@
 const slack = require('./slack.js')
+const utils = require('./utils.js')()
 
 const diceRegex = /^(\d+)d(\d+)$/
 const maxNumberOfDice = 100
@@ -46,10 +47,6 @@ module.exports = {
         let diceResults = rollAllDice(numDice, numSides)
         res.send(slack.buildPublicResponse(`Rolling... :game_die: Result${diceResults.length === 1 ? "" : "s"}: ${diceResults.join(", ")}`))
     }
-}
-
-function isEmpty(theString) {
-    return !theString || theString.length === 0
 }
 
 function isValid(diceInput) {

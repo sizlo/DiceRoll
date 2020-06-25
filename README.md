@@ -17,6 +17,10 @@ Hosted on Heroku at https://warm-depths-57943.herokuapp.com
 
    For private conversations the `@dice_roll` user will need to be added to the conversation
 
+3. Pick a random user from a usergroup
+
+   `/randomuser @someusergroup`
+
 ## Running locally
 
 1. Install dependencies
