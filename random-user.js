@@ -66,7 +66,7 @@ function generateRandomIndexUpTo(maxExclusive) {
 function handleUserInfoSuccess(source, userInfo, userIds, res) {
     if (userInfo.is_bot) {
         let userIdsWithoutThisBot = userIds.filter((userId) => userId != userInfo.id)
-        pickRandomMember(userIdsWithoutThisBot, res)
+        pickRandomMember(source, userIdsWithoutThisBot, res)
     } else {
         res.send(slack.buildPublicResponse(`Choosing random member from ${source}... :game_die: Result: <@${userInfo.id}>`))
     }
