@@ -1,0 +1,123 @@
+{
+	"info": {
+		"_postman_id": "b6f5d4b6-c6f3-4cdf-ba7a-1aa812217230",
+		"name": "DiceRoll",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Roll",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "command",
+							"value": "/roll",
+							"type": "text"
+						},
+						{
+							"key": "text",
+							"value": "4d6",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/command",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"command"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Random user from channel",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "command",
+							"value": "/randomuser",
+							"type": "text"
+						},
+						{
+							"key": "channel_id",
+							"value": "CT21Q20P6",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/command",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"command"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Random user from usergroup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "command",
+							"value": "/randomuser",
+							"type": "text"
+						},
+						{
+							"key": "text",
+							"value": "<!subteam^S02B3EN6A7L>",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/command",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"command"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
